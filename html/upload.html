@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<title>咖啡拉花机上传图案</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+<meta name = "format-detection" content = "telephone=no">
+<script type="text/javascript">
+    !function(a){function b(){var b=g.getBoundingClientRect().width;a.rem=(b/7.2>100?100:(b/7.2<50?50:b/7.2)),g.style.fontSize=a.rem+"px"}var g=a.document.documentElement,e;a.addEventListener("resize",function(){clearTimeout(e),e=setTimeout(b,300)},!1),a.addEventListener("pageshow",function(a){a.persisted&&(clearTimeout(e),e=setTimeout(b,300))},!1),b()}(window);            
+</script>
+<link rel="stylesheet" type="text/css" href="../css/upload.css" />
+</head>
+<body>
+
+    <div class="wrapper">
+        <div class="upload-edit">
+            <div class="upload-file" data-title="点击上传">
+                <div class="upload-image"></div>
+                <canvas class="upload-canvas" id="upload-canvas"></canvas>
+                <input type="file" accept="image/*" onchange="upload.previewImage(this);" />
+            </div>
+            <div class="upload-radio" style="display:none;">
+                <label class="checked" onclick="upload.chooseCup(this);" data-value="1">中杯</label>
+                <label onclick="upload.chooseCup(this);" data-value="2">大杯</label>
+            </div>
+            <div class="upload-handle">
+                <div class="btn" onclick="upload.drawing.repeat({userZoom:1.1})">放大</div>
+                <div class="btn" onclick="upload.drawing.repeat({userZoom:0.9})">缩小</div>
+                <div class="btn" onclick="upload.drawing.repeat({userRotate:15})">旋转</div><!-- 角度 -->
+                <br>
+                <div class="btn" onclick="upload.drawing.repeat({userY:-10})">上移</div>
+                <div class="btn" onclick="upload.drawing.repeat({userY:10})">下移</div>
+                <div class="btn" onclick="upload.drawing.repeat({userX:-10})">左移</div>
+                <div class="btn" onclick="upload.drawing.repeat({userX:10})">右移</div>
+            </div>
+            <div class="upload-text">自由DIY~ 随心所想！</div>
+            <div class="upload-submit">
+                <a href="javascript:;" onclick="upload.uploadSubmit(this);">确&emsp;定</a>
+            </div>
+        </div>
+        <div class="upload-result" style="display:none;">
+            <div class="tit">请将以下号码告诉店员：</div>
+            <div class="code">20180520123</div>
+            <div class="upload-text">自由DIY~ 随心所想！</div>
+            <div class="upload-submit">
+                <a href="javascript:;" onclick="upload.back();">确&emsp;定</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../js/upload.js"></script>
+
+</body>
+</html>

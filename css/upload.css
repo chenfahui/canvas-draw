@@ -1,0 +1,46 @@
+@charset 'utf-8';
+/*咖啡拉花机上传图案*/
+
+body{color:#4d4d4d;font:.22rem/1.5 Helvetica,'Microsoft YaHei','SimSun';word-wrap:break-word;background-color:#f2e5b2;}
+body,div,h1,h2,h3,h4,h5,h6,dl,dt,dd,ul,li,ol,p,table,tr,th,td,form,input,textarea{margin:0;padding:0;}
+body{-webkit-text-size-adjust:100%!important;}
+ul,li,ol{list-style:none outside none;}
+img{border:0 none;vertical-align:top;}
+input,button,textarea,select,optgroup,option{font-family:Helvetica,'Microsoft YaHei','SimSun';font-size:.24rem;font-style:inherit;font-weight:inherit;outline:none;}
+a{color:#fff;font-size:.24rem;text-decoration:none;}
+*{-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-tap-highlight-color:transparent;}
+.wrapper{width:7.2rem;max-width:100%;min-height:100vh;margin:auto;background:url(../img/upload_bg.png) repeat-x center top;background-size:auto 100%;}
+.upload-edit{padding-top:.8rem;}
+.upload-file{width:4rem;height:4rem;border-radius:50%;margin:auto;background-color:rgba(0,0,0,.2);position:relative;}
+.upload-file:before,.upload-text,.upload-submit a{background:url(../img/upload_sprite.png) no-repeat;background-size:7.2rem auto;}
+.upload-file:before{content:attr(data-title);width:2.81rem;height:.92rem;color:#fff;background-position:-3.24rem -1.5rem;text-align:center;line-height:.92rem;font-size:.4rem;font-weight:700;position:absolute;left:50%;top:50%;margin:-.46rem -1.405rem;}
+.upload-file:after{content:'';position:absolute;right:0;top:0;bottom:0;left:0;border-radius:50%;box-shadow:0 .04rem .08rem rgba(0,0,0,.35) inset,0 .02rem #fefde9;}
+.upload-file input{opacity:0;position:absolute;left:0;top:0;height:100%;width:100%;z-index:1;cursor:pointer;}
+.upload-file-ing:before{content:'上传中...';}
+.upload-file-ing:after{z-index:1;}
+.upload-file-hide:before{content:none;}
+.upload-image{display:none;}
+.upload-radio{text-align:center;padding:.45rem 0 .15rem;}
+.upload-radio label{font-size:.4rem;font-weight:700;line-height:.5rem;margin:0 .32rem;}
+.upload-radio label:before{content:'';height:.3rem;width:.3rem;border:.06rem solid #fff;background-color:#fff;border-radius:50%;margin:.05rem .2rem 0 0;display:inline-block;vertical-align:top;}
+.upload-radio label.checked:before{background-color:#854500;}
+
+.upload-canvas{width:4rem;height:4rem;border-radius:50%;position:relative;}
+.upload-handle{text-align:center;font-size:0;padding-top:.25rem;}
+.upload-handle .btn{display:inline-block;vertical-align:top;font-size:.3rem;margin:.1rem;border:1px solid #854500;background-color:#854500;padding:.05rem .15rem;color:#edd4ba;border-radius:.05rem;box-shadow: 0 0.04rem 0.08rem rgba(0,0,0,.35), 0 0.02rem rgba(255,255,255,.35) inset;}
+
+.upload-result{text-align:center;}
+.upload-result .tit{font-size:.4rem;font-weight:700;padding:.85rem 0 .45rem;}
+.upload-result .code{font-size:.6rem;color:#c75900;background-color:#fff;margin:0 .6rem;padding:1.8rem 0;}
+.upload-text{width:5.25rem;height:1.5rem;margin:.4rem auto;text-indent:-999rem;overflow:hidden;}
+.upload-submit{text-align:center;padding-bottom:.5rem;}
+.upload-submit a{width:3.24rem;height:1.06rem;background-position:0 -1.5rem;display:inline-block;vertical-align:top;font-size:.4rem;font-weight:700;line-height:1.06rem;}
+.upload-submit a.disabled:after{content:'...';display:inline-block;text-align:left;width:3ch;text-indent:-1ch;vertical-align:bottom;overflow:hidden;animation:waiting 3s infinite step-start both;-webkit-animation:waiting 3s infinite step-start both;font-family:Consolas, Monaco, monospace;}
+@keyframes waiting{
+    33% {text-indent:0;}
+    66% {text-indent:-2ch;}
+}
+@-webkit-keyframes waiting{
+    33% {text-indent:0;}
+    66% {text-indent:-2ch;}
+}
