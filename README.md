@@ -1,6 +1,6 @@
 # coffee-upload
 
-> A Vue.js project
+> 使用canvas上传图片并编辑（支持旋转、移动、放大缩小）
 
 ## Build Setup
 
