@@ -2,10 +2,10 @@
   <div class="wrapper">
     <keep-alive>
     <div class="upload-edit" v-show="uploadEdit">
-      <div class="upload-file" :class="{'upload-file-ing':uploadFileIng, 'upload-file-hide':uploadFileHide}" data-title="点击上传">
+      <div class="upload-file" ref="uploadFile" :class="{'upload-file-ing':uploadFileIng, 'upload-file-hide':uploadFileHide}" data-title="点击上传">
         <div class="upload-image"></div>
-        <canvas class="upload-canvas" id="upload-canvas"></canvas>
-        <input type="file" accept="image/*" ref="feedbakcImg" @change="previewImage" />
+        <canvas class="upload-canvas" ref="uploadCanvas" v-bind:width="wrapWidth" v-bind:height="wrapHeight"></canvas>
+        <input type="file" accept="image/*" ref="feedbackImg" @change="uploadPreview" />
       </div>
       <div class="upload-radio" style="display:none;">
         <label class="checked" onclick="upload.chooseCup(this);" data-value="1">中杯</label>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import '../../static/css/upload.css'
+import '../assets/css/upload.css'
 
 export default{
   name: 'coffeeUpload',
@@ -51,8 +51,8 @@ export default{
       uploadFileHide: false, /* 隐藏上传按钮 */
       uploadSubmitTxt: '确&emsp;定',
       uploadSubmitClass: '',
-      original: '', /* 原图base64 */
-      wait: false, /* 防止重复提交 */
+      uploadOriginal: '', /* 原图base64 */
+      uploadWait: false, /* 防止重复提交 */
       ratio: window.devicePixelRatio ? window.devicePixelRatio : 1, /* 获取设备像素密度，实现高清 */
       rem: 100, /* 根目录font-size默认100 */
       wrapWidth: 0, /* 图案容器宽度 */
@@ -75,7 +75,7 @@ export default{
     }
   },
   methods: {
-    previewImage (e) {
+    uploadPreview (e) {
       let files = e.target.files
       let self = this
       if (files && files[0]) {
@@ -84,7 +84,7 @@ export default{
         reader.onload = function (evt) {
           self.uploadFileIng = false
           self.uploadFileHide = true
-          self.original = evt.target.result
+          self.uploadOriginal = evt.target.result
           self.drawingRepeat()
           /* 重置用户操作 */
           self.userZoom = 1 /* 用户放大缩小 */
@@ -94,41 +94,37 @@ export default{
         }
         reader.readAsDataURL(files[0])
       }
-      this.$refs.feedbakcImg.value = '' /* 清空file */
+      this.$refs.feedbackImg.value = '' /* 清空file */
     },
     uploadDrawing () {
-      let wrap = document.querySelector('.upload-file')
+      let wrap = this.$refs.uploadFile
       if (!wrap) return
-      this.wrapWidth = wrap.offsetWidth
-      this.wrapHeight = wrap.offsetHeight
+      this.wrapWidth = this.drawingRatio(wrap.offsetWidth)
+      this.wrapHeight = this.drawingRatio(wrap.offsetHeight)
       this.rem = this.drawingRem
-      let drawing = document.getElementById('upload-canvas')
-      if (!drawing) return
-      drawing.width = this.drawingRatio(this.wrapWidth)
-      drawing.height = this.drawingRatio(this.wrapHeight)
     },
     uploadSubmit () {
       let self = this
-      if (this.wait) return
-      let drawing = document.getElementById('upload-canvas')
+      if (this.uploadWait) return
+      let drawing = this.$refs.uploadCanvas
       let img = drawing.toDataURL('image/png')
-      if (!this.original || !img) {
+      if (!this.uploadOriginal || !img) {
         alert('请上传图案')
         return
       }
-      this.wait = true
+      this.uploadWait = true
       this.uploadSubmitTxt = '提交中'
       this.uploadSubmitClass = 'disabled'
       /* 请求返回执行 start */
-      setTimeout(function () { /* setTimeout是模拟请求时间，开发时请移除 */
-        // console.log('图案:'+img);
-        self.wait = false
+      setTimeout(() => { /* setTimeout是模拟请求时间，开发时请移除 */
+        // console.log('图案:' + img)
+        self.uploadWait = false
         self.uploadEdit = false
         self.uploadResult = true
         self.uploadSubmitTxt = '确&emsp;定'
         self.uploadSubmitClass = ''
         self.drawingClear() /* 清空图片 */
-      }, 2000)
+      }, 3000)
       /* 请求返回执行end */
     },
     uploadBack () {
@@ -137,9 +133,9 @@ export default{
     },
     drawingRepeat (option) {
       let self = this
-      let drawing = document.getElementById('upload-canvas')
+      let drawing = this.$refs.uploadCanvas
       if (this.inToDataURL || !drawing) return
-      if (option && !this.original) {
+      if (option && !this.uploadOriginal) {
         alert('请先上传图案')
         return
       }
@@ -149,19 +145,17 @@ export default{
       this.userY = (option && option.userY) ? this.userY + option.userY : this.userY
       this.userX = (option && option.userX) ? this.userX + option.userX : this.userX
       let ctx = drawing.getContext('2d')
-      let wrapWidthRatio = this.drawingRatio(this.wrapWidth)
-      let wrapHeightRatio = this.drawingRatio(this.wrapHeight)
       let bg = new Image()
-      if (this.original) {
-        bg.src = this.original
+      if (this.uploadOriginal) {
+        bg.src = this.uploadOriginal
         bg.onload = function () {
-          ctx.clearRect(0, 0, wrapWidthRatio, wrapHeightRatio) /* 清空 */
-          let bgZoom = wrapWidthRatio / Math.min(bg.width, bg.height) * self.userZoom /* 缩放比 */
+          ctx.clearRect(0, 0, self.wrapWidth, self.wrapHeight) /* 清空 */
+          let bgZoom = self.wrapWidth / Math.min(bg.width, bg.height) * self.userZoom /* 缩放比 */
           ctx.save() /* 保存状态 */
-          ctx.translate(wrapWidthRatio / 2 + self.userX, wrapHeightRatio / 2 + self.userY)
+          ctx.translate(self.wrapWidth / 2 + self.userX, self.wrapHeight / 2 + self.userY)
           ctx.rotate(self.userRotate * Math.PI / 180)
-          ctx.translate(-wrapWidthRatio / 2, -wrapHeightRatio / 2)
-          ctx.drawImage(bg, (wrapWidthRatio - bg.width * bgZoom) / 2, (wrapHeightRatio - bg.height * bgZoom) / 2, bg.width * bgZoom, bg.height * bgZoom)
+          ctx.translate(-self.wrapWidth / 2, -self.wrapHeight / 2)
+          ctx.drawImage(bg, (self.wrapWidth - bg.width * bgZoom) / 2, (self.wrapHeight - bg.height * bgZoom) / 2, bg.width * bgZoom, bg.height * bgZoom)
           ctx.restore() /* 恢复状态 */
           self.inToDataURL = false
         }
@@ -170,10 +164,10 @@ export default{
       }
     },
     drawingClear () {
-      let drawing = document.getElementById('upload-canvas')
+      let drawing = this.$refs.uploadCanvas
       let ctx = drawing.getContext('2d')
       ctx.clearRect(0, 0, drawing.width, drawing.height)
-      this.original = ''
+      this.uploadOriginal = ''
       this.uploadFileHide = false
     },
     drawingRatio (val) {
