@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import '../assets/css/upload.css'
 
 export default{
   name: 'coffeeUpload',
@@ -176,3 +175,5 @@ export default{
   }
 }
 </script>
+
+<style scoped src="../assets/css/upload.css"></style>
