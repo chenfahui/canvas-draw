@@ -3,7 +3,7 @@
 <ol>
       <li>整理出来的移动端canvas案例
         <ul>
-          <li>上传图片并编辑(旋转/移动/放大缩小) coffeeUpload></li>
+          <li>上传图片并编辑(旋转/移动/放大缩小) coffeeUpload</li>
           <li>移动端手写板handWriting</li>
         </ul>
       </li>
